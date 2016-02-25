@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     
     //si il est pour nous repondre
     if (c == tag) {
-      write(fd, argv[2] , 1 );
+      write(fd, "!" , 1 );
     }
     
   }

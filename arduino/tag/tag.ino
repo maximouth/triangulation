@@ -1,16 +1,18 @@
-#define tagNB '1'
+#define tagNB 'p'
 
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
+  char r;
+
   /* si il y a quelque chose à lire */
-  if (Serial.available() > 1) {
-    char r = Serial.read();
-    /* si on s'adresse bien à nous */
-    if (r == tagNB)
-      Serial.println(tagNB);
+  while (Serial.available() >= 1) {
+    if ((r = Serial.read()) == '?') {
+      Serial.print('!');
+    }
   }
-  
+
+  delay (1000);
 }
