@@ -1,7 +1,0 @@
-set terminal png
-set output "couloir.png"
-
-set title "signal dans le couloir"
-set x label "distance m"
-set y label "puissance db"
-plot couloir
