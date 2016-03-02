@@ -7,11 +7,13 @@
 
 /* Coordonées de la balise 2*/
 #define X2 0
-#define Y2 5
+#define Y2 3
 
 /* Coordonées de la balise 3*/
-#define X3 5
+#define X3 2
 #define Y3 0
 
+/* La precision des mesures  */
+#define EPSILON 0.01
 
 #endif
