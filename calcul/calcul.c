@@ -5,20 +5,15 @@
 
 #include "donne.h"
 
-
-
-/* vecteur x0 y0  */
-double *x1;
-
-
 /* calcul la matrice  */
 double ** calc_mat (double x0, double y0) {
-  double a = -(2 * x0) - (2 * X1);
-  double b = -(2 * y0) - (2 * Y1);
-  double c = -(2 * x0) - (2 * X2);
-  double d = -(2 * y0) - (2 * Y2); 
-  double e = -(2 * x0) - (2 * X3);
-  double f = -(2 * y0) - (2 * Y3); 
+
+  double a = (2 * x0) - (2 * X1);
+  double b = (2 * y0) - (2 * Y1);
+  double c = (2 * x0) - (2 * X2);
+  double d = (2 * y0) - (2 * Y2); 
+  double e = (2 * x0) - (2 * X3);
+  double f = (2 * y0) - (2 * Y3); 
 
   double **mat = malloc (3 * sizeof(double*));
 
@@ -68,7 +63,7 @@ double ** calc_mat (double x0, double y0) {
        /
       (-((a*b + c*d + e*f)*(a*b + c*d + e*f)) +
        (a*a + c*c + e*e) * (b*b + d*d + f*f)))
-      +
+     +
      ((a * (-a*b - c*d - e*f))
       /
       (-((a*b + c*d + e*f)*(a*b + c*d + e*f)) +
@@ -81,8 +76,8 @@ double ** calc_mat (double x0, double y0) {
       (-((a*b + c*d + e*f)*(a*b + c*d + e*f)) +
        (a*a + c*c + e*e) * (b*b + d*d + f*f)))
       +
-     ((c * (-a*b - c*d - e*f))
-      /
+      ((c * (-a*b - c*d - e*f))
+       /
       (-((a*b + c*d + e*f)*(a*b + c*d + e*f)) +
        (a*a + c*c + e*e) * (b*b + d*d + f*f)))
       ;
@@ -109,7 +104,7 @@ double ** calc_mat (double x0, double y0) {
    d     distance de l'objet au tag
   */
 double  vf (double x0,double y0,double x,double y,double d) {
-  return (x0 - x)*(x0 - x) + (y0 - y)*(y0 - y) - d;
+  return ((x0 - x)*(x0 - x)) + ((y0 - y)*(y0 - y)) - (d*d);
 }
 
 
@@ -153,24 +148,23 @@ double *algo(double *x1, double d1, double d2, double d3) {
   
   int i = 0;
 
+  
+  
   /* point de depart  */
-  x0[0] = 5;
-  x0[1] = 5;
-
-  for (i = 0 ; i < 100 ; i++) {
-
-    /* empecher de sortir du cadre */
-    if (x1[0] < 0) x1[0] = 0;
-    if (x1[1] < 0) x1[1] = 0;
-   
+  x0[0] = ((X1 * (1/d1)) + (X2 * (1/d2)) + (X3 * (1/d3))) /3;
+  x0[1] = ((Y1 * (1/d1)) + (Y2 * (1/d2)) + (Y3 * (1/d3))) /3;
+  
+  
+  for (i = 0 ; i < 10 ; i++) {
+  
     
     /* calculer le xn suivant */
-    x1 = add_vect_vect (x0,
-			mult_vect_mat (
-				       calc_mat(x0[0],x0[1]) ,
-				       calc_vf (x0[0],x0[1],d1,d2,d3))); 
-
-
+    x1 = add_vect_vect (x0, 
+			mult_vect_mat ( calc_mat(x0[0],x0[1]),
+					calc_vf (x0[0],x0[1],d1,d2,d3))
+			);
+    
+    
     printf ("x0 : ");
     printf ("%lf ", x0[0]);
     printf ("%lf \n", x0[1]); 
@@ -179,34 +173,30 @@ double *algo(double *x1, double d1, double d2, double d3) {
     printf ("%lf \n\n", x1[1]);
 
 
+    
     /* regarder si l'on est assez precis */
     if ( (fabs(x1[0] - x0[0]) < EPSILON) &&  (fabs(x1[1] - x0[1]) < EPSILON)) {
-      printf ("%lf ", x0[0]);
-      printf ("%lf \n", x0[1]); 
-      printf ("%lf ", x1[0]);
-      printf ("%lf \n\n", x1[1]);
-     
       printf ("fini en %d itérations\n" , i);
       return x1;
     }
-    
+
     /* le courant devient l'ancien  */
     x0 = x1;
     
   }
   printf (" iteration fini\n");
-  x1[0] = fabs(x1[0]);
-  x1[1] = fabs(x1[1]);
   return x1;
 }
 
 
 
 int main () {
+
+  double *x1;
   x1 = malloc ( 2 * sizeof(double));
 
   
-  x1 = algo (x1, 2.828427, 2.236067 ,2);
+  x1 = algo (x1, 5.6568, 4.4721 , 5.3851);
   printf ("%lf ", x1[0]);
   printf ("%lf \n", x1[1]);
   
