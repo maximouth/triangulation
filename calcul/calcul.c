@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #include "donne.h"
 
 /* calcul la matrice  */
@@ -117,6 +116,12 @@ double * calc_vf (double x0, double y0, double d1, double d2, double d3) {
   F[1] = vf (x0, y0, X2, Y2, d2);
   F[2] = vf (x0, y0, X3, Y3, d3);
 
+  printf ("F : ");
+  printf ("%lf ", F[0]);
+  printf ("%lf ", F[1]);
+  printf ("%lf\n", F[2]);
+
+  
   return F;
 }
 
@@ -125,8 +130,8 @@ double * calc_vf (double x0, double y0, double d1, double d2, double d3) {
 double* mult_vect_mat (double **mat , double *F ) {
   double *tab = malloc (2 * sizeof(double));
 
-  tab[0] = (mat[0][0] * F[0]) + (mat[0][1] * F[1]) + (mat[0][2] * F[2]) ;
-  tab[1] = (mat[1][0] * F[0]) + (mat[1][1] * F[1]) + (mat[1][2] * F[2]) ;
+  tab[1] = (mat[0][0] * F[0]) + (mat[0][1] * F[1]) + (mat[0][2] * F[2]) ;
+  tab[0] = (mat[1][0] * F[0]) + (mat[1][1] * F[1]) + (mat[1][2] * F[2]) ;
   
   return tab;
 }
@@ -145,21 +150,22 @@ double * add_vect_vect (double *vect1, double *vect2) {
 
 double *algo(double *x1, double d1, double d2, double d3) {
   double *x0 = malloc (2 * sizeof(double));
-  
+  double *xmin = malloc (2 * sizeof(double));
   int i = 0;
 
   
   
   /* point de depart  */
-  x0[0] = ((X1 * (1/d1)) + (X2 * (1/d2)) + (X3 * (1/d3))) /3;
-  x0[1] = ((Y1 * (1/d1)) + (Y2 * (1/d2)) + (Y3 * (1/d3))) /3;
-  
-  
+  //  x0[0] = ((X1 * (1/d1)) + (X2 * (1/d2)) + (X3 * (1/d3))) / 3 ;
+  //x0[1] = ((Y1 * (1/d1)) + (Y2 * (1/d2)) + (Y3 * (1/d3))) / 3;
+  x0[0] = 1.2;
+  x0[1] = 0.8;
+
   for (i = 0 ; i < 10 ; i++) {
   
     
     /* calculer le xn suivant */
-    x1 = add_vect_vect (x0, 
+    x1 = add_vect_vect (x0,
 			mult_vect_mat ( calc_mat(x0[0],x0[1]),
 					calc_vf (x0[0],x0[1],d1,d2,d3))
 			);
@@ -176,14 +182,30 @@ double *algo(double *x1, double d1, double d2, double d3) {
     
     /* regarder si l'on est assez precis */
     if ( (fabs(x1[0] - x0[0]) < EPSILON) &&  (fabs(x1[1] - x0[1]) < EPSILON)) {
+      printf ("\n%lf ", xmin[0]);
+      printf ("%lf \n", xmin[1]);
+
       printf ("fini en %d itérations\n" , i);
       return x1;
     }
 
+    if (fabs(x1[0] - x0[0]) < EPSILON) {
+      xmin[0] = x1[0];
+    }
+				      
+    if (fabs(x1[1] - x0[1]) < EPSILON) {
+      xmin[1] = x1[1];
+    }
+    
+    
     /* le courant devient l'ancien  */
     x0 = x1;
     
   }
+  printf ("\n%lf ", xmin[0]);
+  printf ("%lf \n", xmin[1]);
+
+  
   printf (" iteration fini\n");
   return x1;
 }
@@ -194,10 +216,9 @@ int main () {
 
   double *x1;
   x1 = malloc ( 2 * sizeof(double));
-
   
-  x1 = algo (x1, 5.6568, 4.4721 , 5.3851);
-  printf ("%lf ", x1[0]);
+  x1 = algo (x1, 1 , 1 , 1);
+  printf ("\n%lf ", x1[0]);
   printf ("%lf \n", x1[1]);
   
   
