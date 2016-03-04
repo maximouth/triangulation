@@ -92,6 +92,16 @@ double ** calc_mat (double x0, double y0) {
       (-((a*b + c*d + e*f)*(a*b + c*d + e*f)) +
        (a*a + c*c + e*e) * (b*b + d*d + f*f)))
       ;
+
+  printf ("mat : \n");
+  printf ("%lf ", mat[0][0]);
+  printf ("%lf ", mat[0][1]);
+  printf ("%lf\n", mat[0][2]);
+  printf ("%lf ", mat[1][0]);
+  printf ("%lf ", mat[1][1]);
+  printf ("%lf\n", mat[1][2]);
+
+
     
     return mat;
 }
@@ -103,6 +113,9 @@ double ** calc_mat (double x0, double y0) {
    d     distance de l'objet au tag
   */
 double  vf (double x0,double y0,double x,double y,double d) {
+  printf ("%lf %lf %lf %lf %lf \n" , x0, y0 , x , y , d);
+  printf (" 1er partie : %lf\n", (x0 - x)*(x0 - x));
+  printf (" 2eme partie : %lf\n", (y0 - y)*(y0 - y));
   return ((x0 - x)*(x0 - x)) + ((y0 - y)*(y0 - y)) - (d*d);
 }
 
@@ -130,9 +143,12 @@ double * calc_vf (double x0, double y0, double d1, double d2, double d3) {
 double* mult_vect_mat (double **mat , double *F ) {
   double *tab = malloc (2 * sizeof(double));
 
-  tab[1] = (mat[0][0] * F[0]) + (mat[0][1] * F[1]) + (mat[0][2] * F[2]) ;
-  tab[0] = (mat[1][0] * F[0]) + (mat[1][1] * F[1]) + (mat[1][2] * F[2]) ;
-  
+  tab[0] = (mat[0][0] * F[0]) + (mat[0][1] * F[1]) + (mat[0][2] * F[2]) ;
+  tab[1] = (mat[1][0] * F[0]) + (mat[1][1] * F[1]) + (mat[1][2] * F[2]) ;
+
+  printf ("mat * F : ");
+  printf ("%lf ", tab[0]);
+  printf ("%lf\n", tab[1]);
   return tab;
 }
 
@@ -150,7 +166,6 @@ double * add_vect_vect (double *vect1, double *vect2) {
 
 double *algo(double *x1, double d1, double d2, double d3) {
   double *x0 = malloc (2 * sizeof(double));
-  double *xmin = malloc (2 * sizeof(double));
   int i = 0;
 
   
@@ -158,8 +173,8 @@ double *algo(double *x1, double d1, double d2, double d3) {
   /* point de depart  */
   //  x0[0] = ((X1 * (1/d1)) + (X2 * (1/d2)) + (X3 * (1/d3))) / 3 ;
   //x0[1] = ((Y1 * (1/d1)) + (Y2 * (1/d2)) + (Y3 * (1/d3))) / 3;
-  x0[0] = 1.2;
-  x0[1] = 0.8;
+  x0[0] = 1;
+  x0[1] = 2;
 
   for (i = 0 ; i < 10 ; i++) {
   
@@ -182,29 +197,17 @@ double *algo(double *x1, double d1, double d2, double d3) {
     
     /* regarder si l'on est assez precis */
     if ( (fabs(x1[0] - x0[0]) < EPSILON) &&  (fabs(x1[1] - x0[1]) < EPSILON)) {
-      printf ("\n%lf ", xmin[0]);
-      printf ("%lf \n", xmin[1]);
+      printf ("\n%lf ", x1[0]);
+      printf ("%lf \n", x1[1]);
 
       printf ("fini en %d itérations\n" , i);
       return x1;
-    }
-
-    if (fabs(x1[0] - x0[0]) < EPSILON) {
-      xmin[0] = x1[0];
-    }
-				      
-    if (fabs(x1[1] - x0[1]) < EPSILON) {
-      xmin[1] = x1[1];
-    }
-    
+    }   
     
     /* le courant devient l'ancien  */
     x0 = x1;
     
   }
-  printf ("\n%lf ", xmin[0]);
-  printf ("%lf \n", xmin[1]);
-
   
   printf (" iteration fini\n");
   return x1;
