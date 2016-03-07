@@ -173,8 +173,8 @@ double *algo(double *x1, double d1, double d2, double d3) {
   /* point de depart  */
   //  x0[0] = ((X1 * (1/d1)) + (X2 * (1/d2)) + (X3 * (1/d3))) / 3 ;
   //x0[1] = ((Y1 * (1/d1)) + (Y2 * (1/d2)) + (Y3 * (1/d3))) / 3;
-  x0[0] = 1;
-  x0[1] = 2;
+  x0[0] = 1.1;
+  x0[1] = 0.9;
 
   for (i = 0 ; i < 10 ; i++) {
   

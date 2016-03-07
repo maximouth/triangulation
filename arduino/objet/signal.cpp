@@ -108,7 +108,7 @@ int puissance() {
 }
 
 
-float convert (int n) {
+float convert_p_distance (int n) {
   float res = -0.30228*(n-5.42495) + 0.006695* n*n; 
   if (res < 0) {
     return 0;

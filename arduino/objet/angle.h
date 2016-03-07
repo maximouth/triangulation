@@ -16,7 +16,7 @@ float calcul_angle (float a, float b, float c);
 float cot (float angle);
 
 /* converti un angle en radian en degré */
-float convert (float rad);
+float convert_angle (float rad);
 
 
 #endif

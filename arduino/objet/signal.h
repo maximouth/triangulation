@@ -8,6 +8,6 @@ int asci (char c);
 /* lit et ignore les '!' lu  */
 char get_byte_ignore ();
 /* convertie la puissance du signal en distance m*/
-float convert (int n);
+float convert_p_distance (int n);
 
 #endif
