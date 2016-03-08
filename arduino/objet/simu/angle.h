@@ -4,7 +4,7 @@
 
 /* calcul la taille du segment [AB] avec leurs 
 coordonées  */
-double calcul_c (int x1,int y1 , int x2, int y2);
+double calcul_c (double x1,double y1 , double x2, double y2);
 
 /* calcul l'angle l'angle du croisement de (AC) et (AB)
    a longueur de BC

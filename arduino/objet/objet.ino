@@ -13,9 +13,9 @@ void setup() {
 int tab[3] = {0,0,0};
 
 /*table des distances de  obj à tag*/
-double distTag1 = 1;
-double distTag2 = 1;
-double distTag3 = 1;
+double distTag1 = 2;
+double distTag2 = 2;
+double distTag3 = 2;
 
 /* angle entre les différents points  */
 double a12 = 0;
@@ -99,7 +99,8 @@ void loop() {
     (T31 * (xq1*yq3 - xq3*yq1));
 
   /* 5) compute the denominator D (if D = 0, return with an error) */
-  D = (xq12 - xq23)*(yq23 - yq31) - (yq12 - yq23)*(xq23 - xq31);
+    D = fabs((xq12 - xq23)*(yq23 - yq31) - (yq12 - yq23)*(xq23 - xq31));
+  //  D = (xq12 - xq23)*(yq23 - yq31) - (yq12 - yq23)*(xq23 - xq31);
 
   if (D == 0) {
     Serial.println ("ERROR, D = 0");

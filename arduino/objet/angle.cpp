@@ -2,9 +2,9 @@
 #include "donne.h"
 
 /* calcul la taille du segment [AB] avec leurs coordonées  */
-float calcul_c (int x1,int y1 , int x2, int y2) {
-  return sqrt (pow ((x2 - x1) ,2) +
-	       pow ((y2 - y1) ,2));
+double calcul_c (int x1,int y1 , int x2, int y2) {
+return sqrt ((double) ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))) ;
+
 }
 
 /* calcul l'angle l'angle en radian du croisement de (AC) et (AB)
@@ -12,17 +12,29 @@ float calcul_c (int x1,int y1 , int x2, int y2) {
    b longueur de AC
    c longueur de BC
   */
-float calcul_angle (float a, float b, float c) {
-  return acos (((pow(a,2))+(pow(b,2))-(pow(c,2)))
-	       / (2 * a * b));
+double calcul_angle (double a, double b, double c) {
+  return acos (a * a + b * b - c * c) / (2 * a * b) ;
 }
 
+
+#define COT_LIMIT (1000000.0)
+
 /* calcul la cotangente de l'angle angle radian*/
-float cot (float angle) {
-  return (cos(angle) / sin(angle)); 
+double cot (double angle) {
+  double res = (cos(angle) / sin(angle));
+
+   if (res > COT_LIMIT) {
+     res = COT_LIMIT ;
+  }
+  else
+    if (res > - COT_LIMIT) {
+      res = - COT_LIMIT ;
+    }
+
+  return res;
 }
 
 /* converti un angle en radian en degré */
-float convert_angle (float rad) {
-  return 180 * rad / M_PI;
+double convert_angle (double rad) {
+  return (180.0 * rad) / M_PI ;
 }
