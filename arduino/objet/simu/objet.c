@@ -7,6 +7,12 @@
 
 #define DEBUG
 
+#define RAD2DEG     (180/PI)
+#define DEG2RAD     (PI/180)
+#define COT_MAX     100000
+
+#define adjust_value( value , max )  ( ( value > max ) ? max : ( ( value < -max ) ? -max : value ) )  
+
 /*table des puissances signaux */
 int tab[3] = {0,0,0};
 
@@ -47,9 +53,9 @@ double D;
 int main (int argc, char *argv[])
 {
   /* Coordonnées en entrée */
-  double x1,x2,x3,y1,y2,y3,x0,y0,xalpha,yalpha;
+  double x1,x2,x3,y1,y2,y3,x0,y0;
   
-  if ((argc < 10) || (argc > 10)) {
+  if ((argc < 9) || (argc > 9)) {
     printf ("mauvaise utilisation\n./simu x1 y1 x2 y2 x3 y3 x0 y0 alpha \n");
     return 2;
   }
@@ -62,8 +68,6 @@ int main (int argc, char *argv[])
   y3 = atof (argv[6]);
   x0 = atof (argv[7]);
   y0 = atof (argv[8]);
-  xalpha = atof (argv[9]);
-  //yalpha = atof (argv[10]);
   
 
 #ifdef DEBUG
@@ -89,12 +93,12 @@ int main (int argc, char *argv[])
   a2 = calcul_angle (distTag2,calcul_c(xalpha,yalpha,x0,y0),calcul_c(xalpha,yalpha,x2,y2));
   a3 = calcul_angle (distTag3,calcul_c(xalpha,yalpha,x0,y0),calcul_c(xalpha,yalpha,x3,y3));
   */
-  a12 = calcul_angle (distTag1, distTag2, c1) + xalpha;
-  a23 = calcul_angle (distTag2, distTag3, c2) + xalpha;
-  a31 = calcul_angle (distTag3, distTag1, c3) + xalpha;
+  a12 = calcul_angle (distTag1, distTag2, c1);
+  a23 = calcul_angle (distTag2, distTag3, c2);
+  a31 = calcul_angle (distTag3, distTag1, c3);
   
 #ifdef DEBUG
-  printf ("\na12 = %lf a23 = %lf a31 = %lf\n", a1, a2, a3) ;
+  printf ("\na12 = %lf a23 = %lf a31 = %lf\n", a12, a23, a31) ;
   /* debut de l'algorithme  */
 #endif
 
@@ -111,10 +115,13 @@ int main (int argc, char *argv[])
   /*
   T12 = (a2 - a1);
   T23 = (a3 - a2);
-  */T12 = cot (a12);
+  */
+  T12 = cot (a12);
   T23 = cot (a23);
+  //T12 = adjust_value (a12, COT_MAX);
+  //  T23 = adjust_value (a23, COT_MAX);
   
-  T31 = (1 - (T12 * T23)) / (T12 + T23);
+  T31 = cot(a31); //(1 - (T12 * T23)) / (T12 + T23);
   
 #ifdef DEBUG
   printf ("T12 = %lf T23 = %lf T31 = %lf \n", T12, T23, T31) ;
@@ -154,24 +161,26 @@ int main (int argc, char *argv[])
 #endif
 
   /* 5) compute the denominator D (if D = 0, return with an error) */
-  D = fabs(((xq12 - xq23)*(yq23 - yq31)) - ((yq12 - yq23)*(xq23 - xq31)));
-  //D = (xq12 - xq23)*(yq23 - yq31) - (yq12 - yq23)*(xq23 - xq31);
+  //D = fabs(((xq12 - xq23)*(yq23 - yq31)) - ((yq12 - yq23)*(xq23 - xq31)));
+  D = (xq12 - xq23)*(yq23 - yq31) - (yq12 - yq23)*(xq23 - xq31);
 
 #ifdef DEBUG
   printf ("D = %lf\n", D) ;
 #endif
 
   
-  if (D < 1) {
+  if (D == 0) {
     printf ("ERROR, D = 0\n");
     return 1;
   }
 
   /* 6) compute the robot position */
-  xr = x2 + ((kq31 * (yq12 - yq23)) / D );
-  yr = y2 + ((kq31 * (xq23 - xq12)) / D );
-
-  printf ("Coordonnees du robot calculée : %lf %lf\nCordonnées réelle : %lf %lf\n" , xr, -(yr - 4), x0, y0);
+  //xr = x2 + ((kq31 * (yq12 - yq23)) / D );
+  //yr = y2 + ((kq31 * (xq23 - xq12)) / D );
+  xr = (kq31*(1/D)) * (yq12 - yq23) + x2 ;
+  yr = (kq31*(1/D)) * (xq23 - xq12) + y2 ;
+  
+  printf ("Coordonnees du robot calculée : %lf %lf\nCordonnées réelle : %lf %lf\n" , xr, yr , x0, y0);
   printf ("position error ~= %lf\n", 1/D) ;
 
 

@@ -10,8 +10,7 @@ LIBS= -lm
 
 # User definitions must be here
 EXEC = simu
-INCS = angle.h 
-
+INCS = angle.h \
 
 SOURCES = objet.c \
 angle.c

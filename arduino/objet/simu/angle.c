@@ -33,20 +33,27 @@ double calcul_angle (double a, double b, double c) {
 }
 
 
-#define COT_LIMIT (1000000.0)
+#define EPSI (5)
+
 
 /* calcul la cotangente de l'angle angle radian*/
 double cot (double angle) {
-  double c = cos (angle);
-  double s = sin (angle);
-  double res = (c / s);
-  
+  if ((angle > (1.56)) && (angle < (1.58))) {
 #ifdef DEBUG
-  printf ("\nc = %lf s = %lf\nres = %lf\n", c, s, res) ;
-#endif
+    printf("angle = %lf radians ~= 90 degres \n", angle);
+#endif    
+    return 0;
+  }
+  double t = tan(angle);
 
-  return res;
+#ifdef DEBUG
+  //  printf("\nangle : %lf t = %lf t mod = %lf \n ", angle, t, t_mod);
+  printf("\nangle : %lf tangente = %lf \n\n ", angle, t);
+#endif
+  
+  return (1 / t);
 }
+
 
 /* converti un angle en radian en degré */
 double convert_angle (double rad) {
