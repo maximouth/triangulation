@@ -3,14 +3,20 @@
 #include "angle.h"
 
 //#define DEBUG
-
+#define PIN (6)
 void setup() {
+  pinMode (PIN, INPUT);
   Serial.begin(9600);
   
 }
 
+int rssi = 0;
+
 /*table des puissances signaux */
-int tab[3] = {0,0,0};
+int tab1[3] = {0,0,0};
+int tab2[3] = {0,0,0};
+int tab3[3] = {0,0,0};
+double tab[3] = {0,0,0}; 
 
 /*table des distances de  obj à tag*/
 double distTag1 = 5;
@@ -43,33 +49,54 @@ double D;
 
 void loop() {
 
+  while (Serial.available() > 0) {
+    Serial.read();
+  }
+  
   /*recuperer puissance 1eme balise */
   Serial.write('1');
-  delay(2000);
-  tab[0] = puissance();
-  Serial.print("tab[0] : ");
+  delay(250);
+  tab1[0] = pulseIn(PIN, LOW, 200);
+  Serial.write('1');
+  delay(250);
+  tab1[1] = pulseIn(PIN, LOW, 200);
+  Serial.write('1');
+  delay(250);
+  tab1[2] = pulseIn(PIN, LOW, 200);
+  tab[0] = (tab1[0] + tab1[1] + tab1[2]) / 3;
+  //Serial.print("tab[0] : ");
   Serial.println(tab[0]);
-  delay(1500);
-   
-  /*recuperer puissance 2eme balise */
+
+    /*recuperer puissance 2eme balise */
   Serial.write('2');
-  delay(2000);
-  tab[1] = puissance();
-  Serial.print("tab[1] : ");
+  delay(250);
+  tab2[0] = pulseIn(PIN, LOW, 200);
+  Serial.write('2');
+  delay(250);
+  tab2[1] = pulseIn(PIN, LOW, 200);
+  Serial.write('2');
+  delay(250);
+  tab2[2] = pulseIn(PIN, LOW, 200);
+  tab[1] = (tab2[0] + tab2[1] + tab2[2]) / 3;
+  //Serial.print("tab[1] : ");
   Serial.println(tab[1]);
-  delay(1500);
-  
-  /*recuperer puissance 3eme balise */
+
+    /*recuperer puissance 3eme balise */
   Serial.write('3');
-  delay(2000);
-  tab[1] = puissance();
-  Serial.print("tab[2] : ");
+  delay(500);
+  tab3[0] = pulseIn(PIN, LOW, 200);
+  Serial.write('3');
+  delay(250);
+  tab3[1] = pulseIn(PIN, LOW, 200);
+  Serial.write('3');
+  delay(250);
+  tab3[2] = pulseIn(PIN, LOW, 200);
+  tab[2] = (tab3[0] + tab3[1] + tab3[2]) / 3;
+  //Serial.print("tab[2] : ");
   Serial.println(tab[2]);
-  delay(1500);
-  
+
 
   /* calcul distance */
-  
   distTag1 = convert_p_distance (tab[0]);
   distTag2 = convert_p_distance (tab[1]);
   distTag3 = convert_p_distance (tab[2]);
@@ -155,9 +182,11 @@ void loop() {
   Serial.print ("position error ~= %lf\n", 1/D) ;
 #endif
   
-  Serial.print (" Coordonée du robot :");
+  //Serial.print (" Coordonée du robot :");
   Serial.print (xr);
+  delay (20);
   Serial.print (" ");
+  delay (20);
   Serial.println (yr);
   
 

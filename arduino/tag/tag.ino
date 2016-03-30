@@ -6,13 +6,9 @@ void setup() {
 
 void loop() {
   char r;
-
-  /* si il y a quelque chose à lire */
-  while (Serial.available() >= 1) {
-    if ((r = Serial.read()) == '?') {
-      Serial.print('!');
+  if ((r = Serial.read()) == '1') {
+        Serial.print('!');
     }
-  }
-
-  delay (1000);
+ 
+  delay (150);
 }
