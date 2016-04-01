@@ -6,11 +6,11 @@
 #define Y1 (0)
 
 /* Coordonées de la balise 2*/
-#define X2 (7)
-#define Y2 (0)
+#define X2 (2)
+#define Y2 (4)
 
 /* Coordonées de la balise 3*/
 #define X3 (4)
-#define Y3 (6)
+#define Y3 (0)
 
 #endif

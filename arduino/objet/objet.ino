@@ -43,37 +43,103 @@ double D;
 
 void loop() {
 
+  while (Serial.available() > 0) {
+    Serial.read();
+  }
+  
+  delay (1000);
+  
   /*recuperer puissance 1eme balise */
   Serial.write('1');
-  delay(2000);
-  tab[0] = puissance();
-  Serial.print("tab[0] : ");
-  Serial.println(tab[0]);
-  delay(1500);
-   
-  /*recuperer puissance 2eme balise */
-  Serial.write('2');
-  delay(2000);
-  tab[1] = puissance();
-  Serial.print("tab[1] : ");
-  Serial.println(tab[1]);
-  delay(1500);
-  
-  /*recuperer puissance 3eme balise */
-  Serial.write('3');
-  delay(2000);
-  tab[1] = puissance();
-  Serial.print("tab[2] : ");
-  Serial.println(tab[2]);
-  delay(1500);
-  
+  Serial.write('\r');
 
+  get_byte_ignore ();
+
+  //  Serial.write('\n');
+  delay(3000);
+  tab[0] = puissance();
+  //  Serial.print("tab[] : ");
+  Serial.println(tab[0]);
+  get_byte_ignore ();
+  
+  delay(1500);
+
+/*recuperer puissance 1eme balise */
+  Serial.write('2');
+  Serial.write('\r');
+
+  get_byte_ignore ();
+
+  //  Serial.write('\n');
+  delay(3000);
+  tab[1] = puissance();
+  //  Serial.print("tab[] : ");
+  Serial.println(tab[1]);
+  get_byte_ignore ();
+  
+  delay(1500);
+
+  /*recuperer puissance 1eme balise */
+  Serial.write('2');
+  Serial.write('\r');
+
+  get_byte_ignore ();
+
+  //  Serial.write('\n');
+  delay(3000);
+  tab[1] = puissance();
+  //  Serial.print("tab[] : ");
+  Serial.println(tab[1]);
+  get_byte_ignore ();
+  
+  delay(1500);
+
+  /*recuperer puissance 1eme balise */
+  Serial.write('3');
+  Serial.write('\r');
+
+  get_byte_ignore ();
+
+  //  Serial.write('\n');
+  delay(3000);
+  tab[2] = puissance();
+  //  Serial.print("tab[] : ");
+  Serial.println(tab[2]);
+  get_byte_ignore ();
+  
+  delay(1500);
+
+/*recuperer puissance 1eme balise */
+  Serial.write('3');
+  Serial.write('\r');
+
+  get_byte_ignore ();
+
+  //  Serial.write('\n');
+  delay(3000);
+  tab[2] = puissance();
+  //  Serial.print("tab[] : ");
+  Serial.println(tab[2]);
+  get_byte_ignore ();
+  
+  delay(1500);
+
+  
   /* calcul distance */
   
   distTag1 = convert_p_distance (tab[0]);
   distTag2 = convert_p_distance (tab[1]);
   distTag3 = convert_p_distance (tab[2]);
   
+  Serial.println(distTag1);
+  get_byte_ignore ();
+
+  Serial.println(distTag2);
+  get_byte_ignore ();
+
+  Serial.println(distTag3);
+  get_byte_ignore ();
+
   
   /* calcul angle  */
   a12 = calcul_angle (distTag1, distTag2, calcul_c (X1, Y1, X2, Y2));
@@ -155,11 +221,15 @@ void loop() {
   Serial.print ("position error ~= %lf\n", 1/D) ;
 #endif
   
-  Serial.print (" Coordonée du robot :");
+  //  Serial.print (" C du robot :");
   Serial.print (xr);
   Serial.print (" ");
   Serial.println (yr);
-  
+
+  get_byte_ignore ();
+  get_byte_ignore ();
+  get_byte_ignore ();
+        
 
   delay (2000);
 }

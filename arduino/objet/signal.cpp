@@ -3,7 +3,7 @@
 char get_byte_ignore ()
 {
   char c = '!' ;
-  while (c == '!') {
+  while (c == '!' | c == '\r' | c == 'O' | c == 'K' | c == '\n'){
     c = Serial.read();
   }
   return (c) ;
@@ -57,6 +57,8 @@ int asci (char c) {
     return 15;
     break;
   default :
+    //    Serial.write ("lu : ");
+    //    Serial.write (c);
     return 0;
     
   }
@@ -65,18 +67,18 @@ int asci (char c) {
 
 int puissance() {
   int hex1 = 0, hex2 = 0;
-  
+
   /*Enter to command mode*/
   Serial.write('+');
   Serial.write('+');
   Serial.write('+');
-  Serial.flush();
   delay(2000);
 
   /*Ignore response*/
   get_byte_ignore ();
   get_byte_ignore ();
   get_byte_ignore ();  
+  
   
   /*Ask for signal power*/
   Serial.write('a');
@@ -85,11 +87,11 @@ int puissance() {
   Serial.write('b');
   Serial.write('\r');
   delay(2000);
-
+  
   /*Read response*/
   hex1 = get_byte_ignore ();  
   hex2 = get_byte_ignore ();  
-  get_byte_ignore (); 
+  //get_byte_ignore (); 
   
   /*Exit command mode*/
   Serial.write('a');
@@ -98,18 +100,20 @@ int puissance() {
   Serial.write('n');
   Serial.write('\r');
   delay(2000);
-
+  
   /*Ignore response*/
   get_byte_ignore ();
   get_byte_ignore ();
   get_byte_ignore ();  
-    
+  
   return (16 * asci(hex1)) + asci(hex2);
 }
 
 
 float convert_p_distance (int n) {
-  float res = -0.30228*(n-5.42495) + 0.006695* n*n; 
+   float res = (0.7844938) * (n - 17.630182) + (- 0.0086405 * n * n);
+
+
   if (res < 0) {
     return 0;
   }
